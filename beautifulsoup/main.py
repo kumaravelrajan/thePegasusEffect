@@ -15,15 +15,17 @@ def main():
 
     # date_index = pd.to_datetime(post_data['time'])
 
-    g = post_data[post_data.index >= datetime(2021, 1, 1)]
+    YEAR = 2020
+
+    g = post_data[f'{YEAR}-01-01':f'{YEAR}-12-31']
     g = g['title'].groupby(pd.Grouper(freq='M'))
     # g.index.map(lambda dt: dt.month)
     counts = g.count()
     counts.index = counts.index.map(lambda dt: dt.strftime('%b'))
     print(counts)
 
-    plt.title('Posts by Vijaita Sing on thehindu.com (2021')
-    counts.plot(kind='bar', xlabel='Month in 2021', ylabel='# of posts')
+    plt.title(f'Posts by Vijaita Sing on thehindu.com ({YEAR})')
+    counts.plot(kind='bar', xlabel=f'Month in {YEAR}', ylabel='# of posts')
     #
     # x = g['title']
     # x.plot()
