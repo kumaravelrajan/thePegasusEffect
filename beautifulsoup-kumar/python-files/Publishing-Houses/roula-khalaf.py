@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import json
+import dateutil.parser as parser
 
 # Clear terminal before each run
 os.system('cls||clear') # this line clears the screen 'cls' = windows 'clear' = unix
@@ -20,9 +21,9 @@ for i in range(1,3):
         all_links.append(f"https://www.ft.com{i.a['href']}")
 
     for index, date in enumerate(all_visible_dates):
-        tempdict = {"title": all_headings[index].text, "time": date.text.strip('\n'), "author": journo_name, "url": all_links[index]}#, “length”: $length_in_words}
+        tempdict = {"title": all_headings[index].text, "time": parser.parse(date.text.strip('\n')).isoformat(), "author": journo_name, "url": all_links[index]}#, “length”: $length_in_words}
         listForToWriteToJson.append(tempdict)
 
-with open(f"json-files/{journo_name}.json", "w") as f:
+with open(f"/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/beautifulsoup-kumar/json-files/{journo_name}.json", "w") as f:
     f.write(json.dumps(listForToWriteToJson, indent=4, ensure_ascii=False))
     f.flush()

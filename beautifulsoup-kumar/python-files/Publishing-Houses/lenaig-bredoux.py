@@ -2,18 +2,17 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import json
+import dateutil.parser as parser
 
 from requests.api import head
-
-# todo - page 2
 
 # Clear terminal before each run
 os.system('cls||clear') # this line clears the screen 'cls' = windows 'clear' = unix
 
-journo_name = "Edwy-Plenel"
+journo_name = "lenaig-bredoux"
 listForToWriteToJson = []
 for j in range(1,3):
-    html_text = requests.get(f"https://www.mediapart.fr/en/biographie/edwy-plenel?page={j}")
+    html_text = requests.get(f"https://www.mediapart.fr/en/biographie/lenaig-bredoux")
     soup = BeautifulSoup(html_text.text, 'lxml')
 
     allArticles = soup.find_all("li" , attrs={"data-type":"article"})   
@@ -24,7 +23,8 @@ for j in range(1,3):
 
     # dates
     for i in allArticles:
-        dates.append(i.find('time')['datetime'])
+        # dates.append(i.find('time')['datetime'])
+        dates.append((parser.parse(i.find('time')['datetime'])).isoformat())
 
     # links
     for i in allArticles:
@@ -39,6 +39,6 @@ for j in range(1,3):
         tempdict = {"title": headings[index], "time": date, "author": journo_name, "url": links[index]}#, “length”: $length_in_words}
         listForToWriteToJson.append(tempdict)
 
-with open(f"json-files/{journo_name}.json", "w") as f:
+with open(f"/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/beautifulsoup-kumar/json-files/{journo_name}.json", "w") as f:
     f.write(json.dumps(listForToWriteToJson, indent=4, ensure_ascii=False))
     f.flush()
