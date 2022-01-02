@@ -5,22 +5,22 @@ from rathod_nihalsing_the_leaflet import parse_all as parse_rathod
 from singh_vieta_the_hindu import parse_all as parse_vieta
 from the_wire import parse_all as parse_the_wire, json as parse_json
 from bradley_hope_wsj import parse_all as parse_bradley
-from proceso import parse_all as parse_proceso
 from humanite import parse_all as parse_humanite
 from quinto_elemento_lab import parse_all as parse_quinto
 from elconfidential_ignacio_cembrero import parse_all as parse_elconfidential
 from ledesk_ali_amar import parse_all as parse_ledesk
 from lindependantexpress_carlos_ketohu import parse_all as parse_independent_express
+from luniversal_ricardo_raphael import parse_all as parse_luniversal
 from matplotlib import pyplot as plt
 from datetime import datetime, date
 import pandas as pd
 
 def main():
     #
-    journalist_name = "Carlos Ketohu"
+    journalist_name = "Ricardo Raphael"
 
 
-    post_data = parse_independent_express()
+    post_data = parse_luniversal()
 
     with open(f"{journalist_name.replace(' ', '_').lower()}.json", 'w') as f:
         json.dump(post_data, f, default=json_serial)
