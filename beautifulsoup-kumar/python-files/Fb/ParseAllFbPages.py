@@ -13,18 +13,19 @@ import os
 os.system('clear')
 listForJson = []
 
-journo_name = "Khadija-Ismayilova"
+#todo - Change journo_name and page name!
+journo_name = "Carmen-Aristegui"
 
 # Scrape Facebook for posts
 temporary_banned_count = 0
 dateExceed = 0
 startDateExceedCalculation = False
 try:
-    for post in get_posts('khadija.ismayil', pages=500 , options={"allow_extra_requests": False, "posts_per_page": 200},  
+    for post in get_posts('CarmenAristeguiOficial', pages=2000 , options={"allow_extra_requests": False, "posts_per_page": 200},  
     cookies="/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/beautifulsoup-kumar/python-files/Fb/cookies.json"):
         try:
             ctDate = parser.parse(post['time'].strftime("%Y-%m-%d"))
-            if((parser.parse(post['time'].strftime("%Y-%m-%d")) - parser.parse("2019-12-31")).days > 0):
+            if((parser.parse(post['time'].strftime("%Y-%m-%d")) - parser.parse("2016-12-31")).days > 0):
                 listForJson.append({"title": post['post_text'], "time": post['time'].isoformat(), "author": journo_name, "url": post['post_url']})
 
                 if(startDateExceedCalculation):
@@ -44,7 +45,7 @@ try:
         except:
             continue
 
-    with open(f"/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/beautifulsoup-kumar/json-files/Fb/{journo_name}.json", "w") as f:
+    with open(f"/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/beautifulsoup-kumar/json-files/Fb/{journo_name}-fb.json", "w") as f:
         f.write(json.dumps(listForJson, indent=4, ensure_ascii=False))
         f.flush()
 except exceptions.TemporarilyBanned as e:
