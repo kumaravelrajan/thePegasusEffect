@@ -18,7 +18,7 @@ def json(author):
     per_page = 100
     post_data = []
     author_map = {}
-    i = 0
+    i = 1
     while True:
         res = requests.get(JSON_URL % (author, per_page, i))
         i+=1
@@ -33,11 +33,18 @@ def json(author):
         if len(articles) == 0:
             break
         for article in articles:
+            res = requests.get(f'https://thewire.in/{article["prime_category"][0]["slug"]}/{article["post_name"]}')
+            if res.status_code == 200:
+                soup = BeautifulSoup(res.text)
+                length = len(soup.find('div', class_='postComplete__description').text.split())
+            else:
+                length = 0
             post_data.append({
                 'title': article['post_title'],
                 'url': article['guid'],
                 'time': article['post_date'],
                 'author': author_map[int(article['post_author'])],
+                'length': length,
             })
         print('Total scraped posts', len(post_data))
     return post_data

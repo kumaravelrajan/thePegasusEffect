@@ -14,10 +14,10 @@ import pandas as pd
 
 def main():
     #
-    journalist_name = "Quinto Elemento Lab Alejandra Xanic"
+    journalist_name = "Swati Chaturvedi"
 
 
-    post_data = parse_quinto()
+    post_data = parse_json("swati-chaturvedi")
 
     with open(f"{journalist_name.replace(' ', '_').lower()}.json", 'w') as f:
         json.dump(post_data, f, default=json_serial)

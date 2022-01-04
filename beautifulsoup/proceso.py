@@ -8,7 +8,7 @@ from datetime import datetime
 import pandas as pd
 
 
-URLS = [f"https://www.wsj.com/news/author/bradley-hope?page={i+1}" for i in range(32)]
+URLS = ["https://www.proceso.com.mx/autor/jcaraizaga.html"]
 
 def parse_article(url):
     print('parsing url', url)
