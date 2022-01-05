@@ -9,16 +9,18 @@ from proceso import parse_all as parse_proceso
 from humanite import parse_all as parse_humanite
 from quinto_elemento_lab import parse_all as parse_quinto
 from elconfidential_ignacio_cembrero import parse_all as parse_elconfidential
+from ledesk_ali_amar import parse_all as parse_ledesk
+from lindependantexpress_carlos_ketohu import parse_all as parse_independent_express
 from matplotlib import pyplot as plt
 from datetime import datetime, date
 import pandas as pd
 
 def main():
     #
-    journalist_name = "Ignacio Cembrero"
+    journalist_name = "Carlos Ketohu"
 
 
-    post_data = parse_elconfidential()
+    post_data = parse_independent_express()
 
     with open(f"{journalist_name.replace(' ', '_').lower()}.json", 'w') as f:
         json.dump(post_data, f, default=json_serial)
