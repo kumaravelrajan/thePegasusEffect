@@ -40,7 +40,7 @@ def read_files():
         print('{:<30} {:<}'.format(journalist_name, filename_base))
 
         aggregated_frames = []
-        for frame in [twitter, facebook, publishing_house]:
+        for frame, suffix in zip([twitter, facebook, publishing_house], ['Twitter', 'Facebook', 'PublishingHouse']):
             if frame is None:
                 aggregated_frames.append(None)
                 continue
@@ -50,31 +50,44 @@ def read_files():
             grouped = frame.groupby(pd.Grouper(freq='1M'))
             # count new posts per month
             if 'length' in frame:
-                aggregated = grouped.agg(Count=('time', 'count'), AvgLen=('length', 'mean'))
+                aggregated = grouped.agg(**{f'Count{suffix}': ('time', 'count'), 'AvgLen': ('length', 'mean')})
             else:
-                aggregated = grouped.agg(Count=('time', 'count'))
+                aggregated = grouped.agg(**{f'Count{suffix}': ('time', 'count')})
             # normalize the datetime to the beginning of the month to allow for easier processing (otherwise it would be
             # the end of the month)
             aggregated.index = aggregated.index.map(lambda dt: dt.replace(day=1, hour=0, minute=0, second=0))
             print(aggregated)
             aggregated_frames.append(aggregated)
-        if aggregated_frames[1] is not None and aggregated_frames[2] is not None:
-            fig, ax = plt.subplots()
-            # plt.hold(True)
-            ax2 = ax.twinx()
-            all = aggregated_frames[1].join(aggregated_frames[2], lsuffix='Facebook', rsuffix='PublishingHouse')
-            if 'AvgLen' in all:
-                # plt.hold(True)
-                width = 15
-                ax.bar(all.index, all['CountPublishingHouse'], width)
-                ax.bar(all.index, all['CountFacebook'], width, bottom=all['CountPublishingHouse'])
-                # ax.plot(all[['CountPublishingHouse', 'CountFacebook']])
-                # ax.plot(all[['AvgLen']])
-                ax2.plot(all[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
-                plt.show()
-                pass
-            else:
-                continue
+        all_data = None
+        for agg in aggregated_frames:
+            if agg is not None:
+                if all_data is not None:
+                    all_data = all_data.join(agg)
+                else:
+                    all_data = agg
+        if all_data is None:
+            continue
+
+        fig, ax = plt.subplots()
+        # plt.hold(True)
+        ax2 = ax.twinx()
+        # plt.hold(True)
+        width = 15
+        bottom = None
+        if 'CountPublishingHouse' in all_data:
+            ax.bar(all_data.index, all_data['CountPublishingHouse'], width)
+            bottom = all_data['CountPublishingHouse']
+        if 'CountTwitter' in all_data:
+            ax.bar(all_data.index, all_data['CountTwitter'], width, bottom=bottom)
+            bottom = all_data['CountTwitter']
+        if 'CountFacebook' in all_data:
+            ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom)
+        # ax.plot(all_data[['CountPublishingHouse', 'CountFacebook']])
+        # ax.plot(all_data[['AvgLen']])
+        if 'AvgLen' in all_data:
+            ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
+        plt.show()
+        pass
 
 
 
