@@ -11,7 +11,7 @@ journalists = ["Bradley Hope", "Ferdinand Ayité", "Roula Khalaf", "Khadija Isma
 
 
 
-def read_files():
+def main():
     print("{:3} {:3} {:3} {:<}".format('T', 'F', 'P', 'Name'))
 
     for journalist_name in journalists:
@@ -59,6 +59,7 @@ def read_files():
             print(aggregated)
             aggregated_frames.append(aggregated)
         all_data = None
+        # combine all data points into a single dataframe (inner join, i.e. only months are kept where all three data points exist)
         for agg in aggregated_frames:
             if agg is not None:
                 if all_data is not None:
@@ -68,12 +69,16 @@ def read_files():
         if all_data is None:
             continue
 
+        # plot!
         fig, ax = plt.subplots()
-        # plt.hold(True)
-        ax2 = ax.twinx()
-        # plt.hold(True)
-        width = 15
+        ax2 = ax.twinx() # separate axis for the avg len of articles
+        width = 15 # bar width - for some reason this needs to be a really high number
         bottom = None
+        # now draw each data series if they exist
+        # TODO give the datasets unique colors (e.g. facebook always blue etc)
+        # TODO nicer plot formatting
+        # TODO maybe limit the time that is plotted to 1-2 years?
+        # TODO maybe use an outer join to keep months where there is e.g. facebook data, but no articles published
         if 'CountPublishingHouse' in all_data:
             ax.bar(all_data.index, all_data['CountPublishingHouse'], width)
             bottom = all_data['CountPublishingHouse']
@@ -82,8 +87,6 @@ def read_files():
             bottom = all_data['CountTwitter']
         if 'CountFacebook' in all_data:
             ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom)
-        # ax.plot(all_data[['CountPublishingHouse', 'CountFacebook']])
-        # ax.plot(all_data[['AvgLen']])
         if 'AvgLen' in all_data:
             ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
         plt.show()
@@ -97,4 +100,4 @@ if __name__ == "__main__":
     # parser = argparse.ArgumentParser(description='process journalist\'s data as json files to generate graphs')
     # parser.add_argument('json', type=argparse.FileType('r'), nargs='+', help='JSON files to read and generate graphs from')
     # args = parser.parse_args()
-    read_files()
+    main()
