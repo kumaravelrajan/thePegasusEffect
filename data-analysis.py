@@ -88,6 +88,9 @@ def main():
                 continue
 
             # plot!
+            # Note: There is a bug with pandas when it comes to plotting with DataFrame.plot and datetime indexes
+            # For this reason we are plotting directly with pyplot.
+            # See: https://github.com/pandas-dev/pandas/issues/10761
             fig, ax = plt.subplots()
             ax2 = ax.twinx() # separate axis for the avg len of articles
             width = 15 # bar width - for some reason this needs to be a really high number
