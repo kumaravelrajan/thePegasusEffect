@@ -81,7 +81,7 @@ def main():
             for agg in aggregated_frames:
                 if agg is not None:
                     if all_data is not None:
-                        all_data = all_data.join(agg)
+                        all_data = all_data.join(agg, how='outer')
                     else:
                         all_data = agg
             if all_data is None:
