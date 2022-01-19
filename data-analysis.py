@@ -58,9 +58,9 @@ def main():
                     aggregated_frames.append(None)
                     continue
                 # re-index with time/date as index
-                frame.index = frame['time']
+                frame.index = frame['time'].dt.tz_localize(None)
 
-                # group by mont
+                # group by month
                 grouped = frame.groupby(pd.Grouper(freq='1M'))
                 print(grouped.head())
 
@@ -76,7 +76,8 @@ def main():
                 print(aggregated.head())
                 aggregated_frames.append(aggregated)
             all_data = None
-            # combine all data points into a single dataframe (inner join, i.e. only months are kept where all three data points exist)
+            # combine all data points into a single dataframe (inner join, i.e. only months are kept where all three
+            # data points exist)
             for agg in aggregated_frames:
                 if agg is not None:
                     if all_data is not None:
@@ -95,7 +96,6 @@ def main():
             # TODO give the datasets unique colors (e.g. facebook always blue etc)
             # TODO nicer plot formatting
             # TODO maybe limit the time that is plotted to 1-2 years?
-            # TODO maybe use an outer join to keep months where there is e.g. facebook data, but no articles published
             if 'CountPublishingHouse' in all_data:
                 ax.bar(all_data.index, all_data['CountPublishingHouse'], width)
                 bottom = all_data['CountPublishingHouse']
