@@ -31,21 +31,21 @@ def main():
 
             twitter = None
             try:
-                with open(pathToJsonFiles + filename_base + "_twitter.json") as f:
+                with open(pathToJsonFiles + filename_base + "_twitter.json", encoding='utf8') as f:
                     print("{:3} ".format("o"), end='')
                     twitter = pd.read_json(f, convert_dates=['time'])
             except FileNotFoundError:
                 print("{:3} ".format('X'), end='')
             facebook = None
             try:
-                with open(pathToJsonFiles + filename_base + "_facebook.json") as f:
+                with open(pathToJsonFiles + filename_base + "_facebook.json", encoding='utf8') as f:
                     print("{:3} ".format("o"), end='')
                     facebook = pd.read_json(f, convert_dates=['time'])
             except FileNotFoundError:
                 print("{:3} ".format('X'), end='')
             publishing_house = None
             try:
-                with open(pathToJsonFiles + filename_base + "_ph.json") as f:
+                with open(pathToJsonFiles + filename_base + "_ph.json", encoding='utf8') as f:
                     print("{:3} ".format("o"), end='')
                     publishing_house = pd.read_json(f, convert_dates=['time'])
             except FileNotFoundError:
@@ -62,18 +62,15 @@ def main():
 
                 # group by month
                 grouped = frame.groupby(pd.Grouper(freq='1M'))
-                print(grouped.head())
 
                 # count new posts per month
                 if 'length' in frame:
                     aggregated = grouped.agg(**{f'Count{suffix}': ('time', 'count'), 'AvgLen': ('length', 'mean')})
                 else:
                     aggregated = grouped.agg(**{f'Count{suffix}': ('time', 'count')})
-                    print(aggregated.head())
                 # normalize the datetime to the beginning of the month to allow for easier processing (otherwise it would be
                 # the end of the month)
                 aggregated.index = aggregated.index.map(lambda dt: dt.replace(day=1, hour=0, minute=0, second=0))
-                print(aggregated.head())
                 aggregated_frames.append(aggregated)
             all_data = None
             # combine all data points into a single dataframe (inner join, i.e. only months are kept where all three
