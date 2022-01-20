@@ -1,9 +1,11 @@
+import numpy
 import pandas as pd
 import unicodedata
 import os
 import argparse
 import sys
 from matplotlib import pyplot as plt
+import numpy as np
 
 os.system('clear')
 
@@ -89,23 +91,60 @@ def main():
             # For this reason we are plotting directly with pyplot.
             # See: https://github.com/pandas-dev/pandas/issues/10761
             fig, ax = plt.subplots()
-            ax2 = ax.twinx() # separate axis for the avg len of articles
+            fig.set_size_inches(18.5, 10.5)
             width = 15 # bar width - for some reason this needs to be a really high number
-            bottom = None
+            bottom = []
+
+            # only considering data starting jan 1, 2020
+            all_data = all_data.drop(pd.date_range(start=all_data.index[0], end=pd.to_datetime('2019-12-31')), errors='ignore')
+
+            # replace nan with 0.0
+            np.nan_to_num(all_data, False, 0.0)
+
+            p1, p2, p3 = 0, 0, 0
             # now draw each data series if they exist
-            # TODO give the datasets unique colors (e.g. facebook always blue etc)
-            # TODO nicer plot formatting
-            # TODO maybe limit the time that is plotted to 1-2 years?
             if 'CountPublishingHouse' in all_data:
-                ax.bar(all_data.index, all_data['CountPublishingHouse'], width)
-                bottom = all_data['CountPublishingHouse']
+                p1 = ax.bar(all_data.index, all_data['CountPublishingHouse'], width, color='green')
+                bottom = numpy.array(all_data['CountPublishingHouse'])
+                numpy.nan_to_num(bottom, copy=False,nan=0.0)
+            else:
+                bottom = np.zeros(len(all_data.index))
+
             if 'CountTwitter' in all_data:
-                ax.bar(all_data.index, all_data['CountTwitter'], width, bottom=bottom)
-                bottom = all_data['CountTwitter']
+                p2 = ax.bar(all_data.index, all_data['CountTwitter'], width, bottom=bottom, color='dodgerblue')
+                bottom += numpy.array(all_data['CountTwitter'])
+                numpy.nan_to_num(bottom, nan=0.0)
+
             if 'CountFacebook' in all_data:
-                ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom)
-            if 'AvgLen' in all_data:
-                ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
+                p3 = ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom, color='darkblue')
+
+            #if 'AvgLen' in all_data:
+            #    ax2 = ax.twinx()  # separate axis for the avg len of articles
+            #    ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
+
+            ax.set_xlabel('TIME')
+            ax.set_ylabel('#POSTS')
+
+            #xtickDf = all_data.index.strftime('%b-%Y').to_frame()
+            #ax.set_xticks(ticks = range(0, len(xtickDf.index)), labels = xtickDf.index, rotation=45)
+            plt.title(f'Analysis of {filename_base}')
+
+            headers = []
+            plots = []
+
+            if(p1):
+                plots.append(p1[0])
+                headers.append('PublishingHouse')
+            if(p2):
+                plots.append(p2[0])
+                headers.append('Twitter')
+            if(p3):
+                plots.append(p3[0])
+                headers.append('Facebook')
+
+            plt.legend(plots, headers)
+
+            #plt.ylim([0, (max(all_data['CountPublishingHouse'].array + all_data['CountFacebook'].array + all_data['CountTwitter'].array) + 200) ])
             plt.show()
             pass
 
