@@ -97,6 +97,12 @@ def main():
             if all_data is None:
                 continue
 
+            # Set the count values to all be float64 (due to the join, they might get converted to float64s to represent
+            # NaN values). floats don't hurt our case, and we need all values to be the same type
+            for column in ['CountTwitter', 'CountFacbook', 'CountPublishingHouse']:
+                if column in all_data:
+                    all_data[column] = all_data[column].astype('float64')
+
             # plot!
             # Note: There is a bug with pandas when it comes to plotting with DataFrame.plot and datetime indexes
             # For this reason we are plotting directly with pyplot.
