@@ -1,3 +1,5 @@
+import datetime
+
 import numpy
 import pandas as pd
 import unicodedata
@@ -24,6 +26,15 @@ def main():
     print("{:3} {:3} {:3} {:<}".format('T', 'F', 'P', 'Name'))
     JournosAnalysisFinished = []
     pathToJsonFiles = './json_files/'
+
+    # Not all journos data can be analyzed in the period jan 2020 to dec 2021.
+    # Some have different timelines. Specifying the last date when their posts are not important for analysis for such journos so that they can be dropped from the table.
+    # todo - daniel to add names and dates.
+    irrelevantDatesForJournoAnalysis = {
+        'taoufik_bouachrine': '2017-12-31',
+        'carmen_aristegui' : '2016-12-31',
+        'paranjoy_guha_thakurta' : '2018-12-31'
+    }
 
     for fileName in os.listdir(pathToJsonFiles):
         if(findJournoNameFromFileName(fileName) not in JournosAnalysisFinished):
@@ -95,8 +106,14 @@ def main():
             width = 15 # bar width - for some reason this needs to be a really high number
             bottom = []
 
-            # only considering data starting jan 1, 2020
-            all_data = all_data.drop(pd.date_range(start=all_data.index[0], end=pd.to_datetime('2019-12-31')), errors='ignore')
+            # Drop irrelevant date ranges. Default - start from Jan 1, 2020.
+            endDate = datetime.time(0,0,0)
+            if(filename_base in irrelevantDatesForJournoAnalysis):
+                endDate = pd.to_datetime(irrelevantDatesForJournoAnalysis[filename_base])
+            else:
+                endDate = pd.to_datetime('2019-12-31')
+
+            all_data = all_data.drop(pd.date_range(start=all_data.index[0], end=endDate), errors='ignore')
 
             # replace nan with 0.0
             np.nan_to_num(all_data, False, 0.0)
@@ -118,9 +135,9 @@ def main():
             if 'CountFacebook' in all_data:
                 p3 = ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom, color='darkblue')
 
-            #if 'AvgLen' in all_data:
-            #    ax2 = ax.twinx()  # separate axis for the avg len of articles
-            #    ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
+            if 'AvgLen' in all_data:
+                ax2 = ax.twinx()  # separate axis for the avg len of articles
+                ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
 
             ax.set_xlabel('TIME')
             ax.set_ylabel('#POSTS')
