@@ -7,6 +7,7 @@ import os
 import argparse
 import sys
 from matplotlib import pyplot as plt
+import matplotlib.dates as mdates
 import numpy as np
 
 os.system('clear')
@@ -124,12 +125,16 @@ def main():
             # replace nan with 0.0
             np.nan_to_num(all_data, False, 0.0)
 
-            p1, p2, p3 = 0, 0, 0
+            p1, p2, p3, p4 = 0, 0, 0, 0
             # now draw each data series if they exist
+            numOfArticles = np.zeros(len(all_data.index))
+            avgLenOfArticles = np.zeros(len(all_data.index))
+
             if 'CountPublishingHouse' in all_data:
                 p1 = ax.bar(all_data.index, all_data['CountPublishingHouse'], width, color='green')
                 bottom = numpy.array(all_data['CountPublishingHouse'])
                 numpy.nan_to_num(bottom, copy=False,nan=0.0)
+                numOfArticles += all_data['CountPublishingHouse'].array
             else:
                 bottom = np.zeros(len(all_data.index))
 
@@ -137,21 +142,28 @@ def main():
                 p2 = ax.bar(all_data.index, all_data['CountTwitter'], width, bottom=bottom, color='dodgerblue')
                 bottom += numpy.array(all_data['CountTwitter'])
                 numpy.nan_to_num(bottom, nan=0.0)
+                numOfArticles += all_data['CountTwitter'].array
 
             if 'CountFacebook' in all_data:
                 p3 = ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom, color='darkblue')
+                numOfArticles += all_data['CountFacebook'].array
+
 
             if 'AvgLen' in all_data:
                 ax2 = ax.twinx()  # separate axis for the avg len of articles
-                ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
+                p4 = ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
+                avgLenOfArticles = all_data['AvgLen'].array
 
             ax.set_xlabel('TIME')
             ax.set_ylabel('#POSTS')
 
-            #xtickDf = all_data.index.strftime('%b-%Y').to_frame()
-            #ax.set_xticks(ticks = range(0, len(xtickDf.index)), labels = xtickDf.index, rotation=45)
+            ax.xaxis.set_major_locator(mdates.MonthLocator())
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%Y'))
+            ax.tick_params(axis='x', which='both', rotation=45)
+
             plt.title(f'Analysis of {filename_base}')
 
+            # Legend
             headers = []
             plots = []
 
@@ -164,11 +176,18 @@ def main():
             if(p3):
                 plots.append(p3[0])
                 headers.append('Facebook')
+            if(p4):
+                plots.append(p4[0])
+                headers.append('Avg. article length')
 
             plt.legend(plots, headers)
 
-            #plt.ylim([0, (max(all_data['CountPublishingHouse'].array + all_data['CountFacebook'].array + all_data['CountTwitter'].array) + 200) ])
-            plt.show()
+            # set y axis limit
+
+            plt.ylim([0, (max(numOfArticles + avgLenOfArticles) + 15)])
+
+            #plt.show()
+            plt.savefig(f'./graphs/{filename_base}.png', dpi=fig.dpi)
             pass
 
 
