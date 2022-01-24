@@ -69,7 +69,7 @@ while True:
             pubDateSpanishToEnglish[4] = spanishToEnglishMonths[pubDateSpanishToEnglish[4][:-1]]
             pubDate = parser.parse(' '.join(pubDateSpanishToEnglish[3:]))
 
-        if((pubDate - parser.parse("2019-12-31")).days > 0):
+        if((pubDate - parser.parse("2016-12-31")).days > 0):
             dateList.append(pubDate.isoformat())
             titleList.append(article.a['title'])
             urlList.append(article.a['href'])
@@ -86,6 +86,6 @@ while True:
 for index, date in enumerate(dateList):
     listForJson.append({"title": titleList[index], "time": date, "author": journo_name, "url": urlList[index]}) 
 
-with open(f"/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/beautifulsoup-kumar/json-files/{journo_name}.json", "w") as f:
+with open(rf"C:\Users\kumar\Desktop\TUM\Seminar\pegasus_cybercrime_seminar_latest\Other\beautifulsoup-kumar\json-files\Publishing-Houses\{journo_name}Copy.json", "w", encoding='utf8') as f:
     f.write(json.dumps(listForJson, indent=4, ensure_ascii=False))
     f.flush()

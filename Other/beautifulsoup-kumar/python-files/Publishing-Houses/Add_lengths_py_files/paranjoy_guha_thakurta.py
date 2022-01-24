@@ -10,7 +10,7 @@ filenames = ['paranjoy_guha_thakurta_ph', 'lenaig_bredoux_ph', 'rafael_rodriguez
 os.system('clear')
 
 for fileName in filenames:
-    with open(directory + f'\\{fileName}.json', 'r', encoding='utf8') as g:
+    with open(r'/Other/beautifulsoup-kumar/json-files/Publishing-Houses/paranjoy_guha_thakurta_withoutLen.json', 'r', encoding='utf8') as g:
         jsonData = json.load(g)
 
         for index, jsonRow in enumerate(jsonData):
@@ -35,6 +35,6 @@ for fileName in filenames:
                 else:
                     break
 
-        with open(r'C:\Users\kumar\Desktop\TUM\Seminar\pegasus_cybercrime_seminar_latest\Other\beautifulsoup-kumar\jsonWithLength'+ f'\\{fileName}.json', 'w', encoding='utf8') as f:
+        with open(r'C:\Users\kumar\Desktop\TUM\Seminar\pegasus_cybercrime_seminar_latest\Other\beautifulsoup-kumar\json-files\paranjoy_guha_thakurta_withLen.json', 'w', encoding='utf8') as f:
             json.dump(jsonData, f, indent=4, ensure_ascii=False)
             print('Done')
