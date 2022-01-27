@@ -30,11 +30,11 @@ def main():
 
     # Not all journos data can be analyzed in the period jan 2020 to dec 2021.
     # Some have different timelines. Specifying the last date when their posts are not important for analysis for such journos so that they can be dropped from the table.
-    # todo - daniel to add names and dates.
     irrelevantDatesForJournoAnalysis = {
         'taoufik_bouachrine': '2017-12-31',
         'carmen_aristegui' : '2016-12-31',
-        'paranjoy_guha_thakurta' : '2018-12-31'
+        'paranjoy_guha_thakurta' : '2018-12-31',
+        'alejandro_sicairos' : '2016-12-31',
     }
 
     for fileName in os.listdir(pathToJsonFiles):
