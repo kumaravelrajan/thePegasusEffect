@@ -14,14 +14,14 @@ os.system('clear')
 listForJson = []
 
 dict_Name_Fb = {
-    'icembrero': 'ignacia_cembrero',
-    'ali.amar.585559' : 'ali_amar',
-    'ricardomraphael' : 'ricardo_raphael',
-    'iftikhar.gilani' : 'iftikar_ghilani',
-    'cesur.sumerinli' : 'jasur_sumerinli',
-    'SmitaSharmaJournalist' : 'smita_sharma',
-    'alejandro.sicairosrivas' : 'alejandro_sicairos',
-    'maria.moukrim' : 'maria_moukrim'
+    # 'icembrero': 'ignacia_cembrero',
+    # 'ali.amar.585559' : 'ali_amar',
+    # 'ricardomraphael' : 'ricardo_raphael',
+    # 'iftikhar.gilani' : 'iftikar_ghilani',
+    # 'cesur.sumerinli' : 'jasur_sumerinli',
+    # 'SmitaSharmaJournalist' : 'smita_sharma',
+    'alejandro.sicairosrivas' : 'alejandro_sicairos'#,
+    #'maria.moukrim' : 'maria_moukrim'
 }
 
 # Scrape Facebook for posts
@@ -35,7 +35,7 @@ for index, dictKey in enumerate(dict_Name_Fb):
         cookies="/mnt/c/Users/kumar/Desktop/TUM/Seminar/pegasus_cybercrime_seminar_latest/Other/beautifulsoup-kumar/python-files/Fb/cookies.json"):
             try:
                 ctDate = parser.parse(post['time'].strftime("%Y-%m-%d"))
-                if((parser.parse(post['time'].strftime("%Y-%m-%d")) - parser.parse("2019-12-31")).days > 0):
+                if((parser.parse(post['time'].strftime("%Y-%m-%d")) - parser.parse("2016-12-31")).days > 0):
                     listForJson.append({"title": post['post_text'], "time": post['time'].isoformat(), "author": dict_Name_Fb[dictKey], "url": post['post_url']})
 
                     if(startDateExceedCalculation):
