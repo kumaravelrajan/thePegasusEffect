@@ -153,6 +153,7 @@ def main():
                 ax2 = ax.twinx()  # separate axis for the avg len of articles
                 p4 = ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
                 avgLenOfArticles = all_data['AvgLen'].array
+                ax2.set_ylabel('Avg. article length')
 
             ax.set_xlabel('TIME')
             ax.set_ylabel('#POSTS')
