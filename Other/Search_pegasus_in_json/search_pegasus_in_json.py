@@ -50,7 +50,7 @@ for fileName in os.listdir(json_directory):
             print('Target found')
 
         if pegasusFoundInPost:
-            with open(searchPegasus_directory + findJournoNameFromFileName(fileName) + '_pegasus_search.json', 'a+') as fileToWrite:
+            with open(searchPegasus_directory + findJournoNameFromFileName(fileName) + '_pegasus_search.json', 'w') as fileToWrite:
                 fileToWrite.write(json.dumps(pegasusFoundInPost, indent=4, ensure_ascii=False))
                 fileToWrite.flush()
 
