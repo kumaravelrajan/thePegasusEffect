@@ -21,7 +21,7 @@ import numpy as np
 os.system('clear')
 
 def findJournoNameFromFileName(fileName):
-    dataSources = ['facebook', 'twitter', 'ph']
+    dataSources = ['facebook', 'twitter', 'ph', 'pegasus_search']
     dataSourceFoundInFileName = [dataSource for dataSource in dataSources if dataSource in fileName]
     index = fileName.find('_' + dataSourceFoundInFileName[0])
     filename_base = fileName[:index]
@@ -73,6 +73,15 @@ def main():
             except FileNotFoundError:
                 print("{:3} ".format('X'), end='')
             print('{:<30}'.format(filename_base))
+            pegasus_mentions = None
+            try:
+                with open(pathToJsonFiles + filename_base + "_pegasus_search.json", encoding='utf8') as f:
+                    pegasus_mentions = pd.read_json(f, convert_dates=['time'])
+                    pegasus_mentions['time'] = pd.to_datetime(pegasus_mentions['time'], utc=True)
+                    pegasus_mentions.index = pegasus_mentions['time'].dt.tz_localize(None)
+                    pegasus_mentions = pegasus_mentions['time']
+            except FileNotFoundError:
+                pass
 
             aggregated_frames = []
             for frame, suffix in zip([twitter, facebook, publishing_house], ['Twitter', 'Facebook', 'PublishingHouse']):
@@ -94,9 +103,18 @@ def main():
                 # the end of the month)
                 aggregated.index = aggregated.index.map(lambda dt: dt.replace(day=1, hour=0, minute=0, second=0))
                 aggregated_frames.append(aggregated)
+
+            # also join in the data of pegasus mentions
+            if pegasus_mentions is not None:
+                grouped = pegasus_mentions.groupby(pd.Grouper(freq='1M'))
+                aggregated = grouped.agg(**{'PegasusMentions': 'count'})
+                aggregated.index = aggregated.index.map(lambda dt: dt.replace(day=1, hour=0, minute=0, second=0))
+                aggregated_frames.append(aggregated)
+                pass
+
+
             all_data = None
-            # combine all data points into a single dataframe (inner join, i.e. only months are kept where all three
-            # data points exist)
+            # combine all data points into a single dataframe (outer join)
             for agg in aggregated_frames:
                 if agg is not None:
                     if all_data is not None:
