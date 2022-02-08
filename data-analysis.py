@@ -10,14 +10,6 @@ from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
 
-#######################################################################################################################################
-#######################################################################################################################################
-#######################################################################################################################################
-# # todo - include the *_pegasus_search.json files in the analysis and present the results in the final graph.
-#######################################################################################################################################
-#######################################################################################################################################
-#######################################################################################################################################
-
 os.system('clear')
 
 WINDOW_SIZE = 12 # in months
@@ -194,6 +186,7 @@ def main():
                 p4 = ax2.plot(all_data[['AvgLen']].dropna(), color='r', marker='o', ls='-', alpha=.7)
                 avgLenOfArticles = np.nan_to_num(all_data['AvgLen'].array, False)
                 ax2.set_ylabel('Avg. article length')
+                ax2.set_ylim(0, max(avgLenOfArticles) + 15)
 
             if 'PegasusMentions' in all_data:
                 p5 = ax.bar(all_data.index, all_data['PegasusMentions'], width // 4, color='r')
@@ -236,8 +229,7 @@ def main():
             plt.legend(plots, headers)
 
             # set y axis limit
-
-            plt.ylim([0, (max(numOfArticles + avgLenOfArticles) + 15)])
+            ax.set_ylim(0,max(numOfArticles) + 15)
 
             # plt.show() # TODO remove
             plt.savefig(f'./graphs/{filename_base}.png', dpi=fig.dpi)
