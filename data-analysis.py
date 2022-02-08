@@ -20,6 +20,8 @@ import numpy as np
 
 os.system('clear')
 
+WINDOW_SIZE = 12 # in months
+
 def findJournoNameFromFileName(fileName):
     dataSources = ['facebook', 'twitter', 'ph', 'pegasus_search']
     dataSourceFoundInFileName = [dataSource for dataSource in dataSources if dataSource in fileName]
@@ -156,6 +158,13 @@ def main():
             numOfArticles = np.zeros(len(all_data.index))
             avgLenOfArticles = np.zeros(len(all_data.index))
 
+            col_list = list(all_data)
+            if 'AvgLen' in col_list:
+                col_list.remove('AvgLen')
+            if 'PegasusMentions' in col_list:
+                col_list.remove('PegasusMentions')
+            all_data['CountTotal'] = all_data[col_list].sum(axis=1)
+            windowed_mean = all_data['CountTotal'].rolling(WINDOW_SIZE, min_periods=1).mean()
             if 'CountPublishingHouse' in all_data:
                 p1 = ax.bar(all_data.index, all_data['CountPublishingHouse'], width, color='green')
                 bottom = numpy.array(all_data['CountPublishingHouse'])
@@ -180,6 +189,9 @@ def main():
                 p4 = ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
                 avgLenOfArticles = all_data['AvgLen'].array
                 ax2.set_ylabel('Avg. article length')
+
+            # plot rolling average
+            rolling_avg = ax.plot(all_data.index, windowed_mean, color='darkblue', linestyle='dashed')
 
             ax.set_xlabel('TIME')
             ax.set_ylabel('#POSTS')
@@ -206,6 +218,9 @@ def main():
             if(p4):
                 plots.append(p4[0])
                 headers.append('Avg. article length')
+
+            plots.append(rolling_avg[0])
+            headers.append(f'{WINDOW_SIZE}-month rolling avg. of total contribution count')
 
             plt.legend(plots, headers)
 
