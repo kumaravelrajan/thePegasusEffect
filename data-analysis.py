@@ -197,7 +197,7 @@ def main():
             ax.set_xlabel('TIME')
             ax.set_ylabel('#POSTS')
 
-            ax.xaxis.set_major_locator(mdates.MonthLocator())
+            ax.set_xticks(all_data.index)
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%Y'))
             ax.tick_params(axis='x', which='both', rotation=45)
 
