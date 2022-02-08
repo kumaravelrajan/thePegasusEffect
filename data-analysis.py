@@ -189,12 +189,14 @@ def main():
                 p3 = ax.bar(all_data.index, all_data['CountFacebook'], width, bottom=bottom, color='darkblue')
                 numOfArticles += all_data['CountFacebook'].array
 
-
             if 'AvgLen' in all_data:
                 ax2 = ax.twinx()  # separate axis for the avg len of articles
                 p4 = ax2.plot(all_data[['AvgLen']].dropna(), color='r', marker='o', ls='-', alpha=.7)
                 avgLenOfArticles = np.nan_to_num(all_data['AvgLen'].array, False)
                 ax2.set_ylabel('Avg. article length')
+
+            if 'PegasusMentions' in all_data:
+                p5 = ax.bar(all_data.index, all_data['PegasusMentions'], width // 4, color='r')
 
             # plot rolling average
             rolling_avg = ax.plot(all_data.index, windowed_mean, color='darkblue', linestyle='dashed')
@@ -224,6 +226,9 @@ def main():
             if(p4):
                 plots.append(p4[0])
                 headers.append('Avg. article length')
+            if(p5):
+                plots.append(p5[0])
+                headers.append('Mentions of keyword "pegasus"')
 
             plots.append(rolling_avg[0])
             headers.append(f'{WINDOW_SIZE}-month rolling avg. of total contribution count')
