@@ -206,7 +206,7 @@ def main():
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%Y'))
             ax.tick_params(axis='x', which='both', rotation=45)
 
-            plt.title(f'Analysis of {filename_base}')
+            plt.title(f'Analysis of {" ".join(map(lambda s: s.capitalize(), filename_base.split("_")))}')
 
             # Legend
             headers = []
@@ -234,7 +234,7 @@ def main():
 
             plt.ylim([0, (max(numOfArticles + avgLenOfArticles) + 15)])
 
-            #plt.show()
+            # plt.show() # TODO remove
             plt.savefig(f'./graphs/{filename_base}.png', dpi=fig.dpi)
             pass
 
