@@ -150,8 +150,14 @@ def main():
 
             all_data = all_data.drop(pd.date_range(start=all_data.index[0], end=endDate), errors='ignore')
 
-            # replace nan with 0.0
-            np.nan_to_num(all_data, False, 0.0)
+            # replace nan with 0.0 (except for AvgLen)
+            col_list = list(all_data)
+            if 'AvgLen' in col_list:
+                col_list.remove('AvgLen')
+            values = {}
+            for c in col_list:
+                values[c] = 0.0
+            all_data.fillna(value=values, inplace=True)
 
             p1, p2, p3, p4 = 0, 0, 0, 0
             # now draw each data series if they exist
@@ -186,8 +192,8 @@ def main():
 
             if 'AvgLen' in all_data:
                 ax2 = ax.twinx()  # separate axis for the avg len of articles
-                p4 = ax2.plot(all_data[['AvgLen']].ffill(), color='r', marker='o', ls='-', alpha=.7)
-                avgLenOfArticles = all_data['AvgLen'].array
+                p4 = ax2.plot(all_data[['AvgLen']].dropna(), color='r', marker='o', ls='-', alpha=.7)
+                avgLenOfArticles = np.nan_to_num(all_data['AvgLen'].array, False)
                 ax2.set_ylabel('Avg. article length')
 
             # plot rolling average
