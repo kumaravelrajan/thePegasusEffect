@@ -151,7 +151,7 @@ def main():
                 values[c] = 0.0
             all_data.fillna(value=values, inplace=True)
 
-            p1, p2, p3, p4 = 0, 0, 0, 0
+            p1, p2, p3, p4, p5 = 0, 0, 0, 0, 0
             # now draw each data series if they exist
             numOfArticles = np.zeros(len(all_data.index))
             avgLenOfArticles = np.zeros(len(all_data.index))
