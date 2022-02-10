@@ -124,6 +124,15 @@ def main():
                 if column in all_data:
                     all_data[column] = all_data[column].astype('float64')
 
+            # calculate the rolling 12-month average
+            col_list = list(all_data)
+            if 'AvgLen' in col_list:
+                col_list.remove('AvgLen')
+            if 'PegasusMentions' in col_list:
+                col_list.remove('PegasusMentions')
+            all_data['CountTotal'] = all_data[col_list].sum(axis=1)
+            all_data['RollingAvg'] = all_data['CountTotal'].rolling(WINDOW_SIZE, min_periods=1).mean()
+
             # plot!
             # Note: There is a bug with pandas when it comes to plotting with DataFrame.plot and datetime indexes
             # For this reason we are plotting directly with pyplot.
@@ -156,13 +165,6 @@ def main():
             numOfArticles = np.zeros(len(all_data.index))
             avgLenOfArticles = np.zeros(len(all_data.index))
 
-            col_list = list(all_data)
-            if 'AvgLen' in col_list:
-                col_list.remove('AvgLen')
-            if 'PegasusMentions' in col_list:
-                col_list.remove('PegasusMentions')
-            all_data['CountTotal'] = all_data[col_list].sum(axis=1)
-            windowed_mean = all_data['CountTotal'].rolling(WINDOW_SIZE, min_periods=1).mean()
             if 'CountPublishingHouse' in all_data:
                 p1 = ax.bar(all_data.index, all_data['CountPublishingHouse'], width, color='green')
                 bottom = numpy.array(all_data['CountPublishingHouse'])
@@ -192,7 +194,7 @@ def main():
                 p5 = ax.bar(all_data.index, all_data['PegasusMentions'], width // 4, color='r')
 
             # plot rolling average
-            rolling_avg = ax.plot(all_data.index, windowed_mean, color='darkblue', linestyle='dashed')
+            rolling_avg = ax.plot(all_data.index, all_data['RollingAvg'], color='darkblue', linestyle='dashed')
 
             ax.set_xlabel('TIME')
             ax.set_ylabel('#POSTS')
