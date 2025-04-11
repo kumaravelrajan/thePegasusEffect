@@ -1,6 +1,6 @@
 # The Pegasus Effect
 
-![NSO Group Logo](NSO-group.png)
+![NSO Group Logo](Nso-group-logo.png)
 
 Repository for the cybercrime seminar on pegasus spyware.
 
