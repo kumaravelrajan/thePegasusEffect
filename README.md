@@ -1,6 +1,6 @@
 # The Pegasus Effect
 
-![NSO Group Logo](images/Nso-group-logo.png) ![Amnesty international logo](images/Amnesty_international_logo_resize.png)
+![Header](images/header.png)
 
 Repository for the cybercrime seminar on pegasus spyware.
 
