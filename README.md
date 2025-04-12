@@ -11,3 +11,16 @@ In 2020, around 50,000 phone numbers believed to have been victims of Pegasus su
 It was found that the list contained opposition politicians, activists and around 200 journalists from nearly two dozen countries along with 14 head of states. Pegasus has also been linked to the murder of Saudi journalist [Jamal Khashoggi](https://www.amnesty.org/en/latest/press-release/2021/07/the-pegasus-project/).
 
 As part of the revelations, Forbidden Stories posted detailed profiles of 44 victims of Pegasus on their website. Our project is focused on these 44 individuals. We aim to visualize how Pegasus victims reacted to the fact that they were being spied upon by analyzing their online activity.
+
+## Methodology
+
+For each journalist, the timeline of their selection for targeting with Pegasus was described on Forbidden Stories. 
+
+We hence collected activity data for all journalists in the appropriate time period from three sources: Twitter, Facebook and their main media outlet(s). The latter was usually a newspaper website, but could also be a blog or some other type of dedicated online presence. 
+
+As a sample, the graph generated for Indian journalist Siddharth Varadarajan is show below - 
+
+![Siddharth Varadarajan's graph](graphs/siddharth_varadarajan.png)
+
+## Results
+Including Siddharth Varadarajan, 7/44 journalists' online activity showed extreme variance right after they found out they were being spied on using Pegasus. These journalists were - Carlos Ketohou, Lenaïg Bredoux, Sushant Singh, Ferdinand Ayité, Taoufik Bouachrine, Vijaita Singh, Siddharth Varadarajan.
