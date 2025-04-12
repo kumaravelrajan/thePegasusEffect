@@ -26,4 +26,4 @@ As a sample, the graph generated for Indian journalist Siddharth Varadarajan is 
 Including Siddharth Varadarajan, 7/44 journalists' online activity showed extreme variance right after they found out they were being spied on using Pegasus. These journalists were - Carlos Ketohou, Lenaïg Bredoux, Sushant Singh, Ferdinand Ayité, Taoufik Bouachrine, Vijaita Singh, Siddharth Varadarajan.
 
 ## Final report
-The final report for this project can be found [here](https://github.com/kumaravelrajan/thePegasusEffect/blob/main/Investigating_Pegasus_Impact_on_the_Online_Activity_of_Journalists_Targeted_with_Illegal_Surveillance_-_an_open-source_data_analysis.pdf). 
+The final report for this project can be found [here](thePegasusEffect_finalReport.pdf). 
